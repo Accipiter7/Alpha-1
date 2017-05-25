@@ -2646,8 +2646,8 @@ static ssize_t fts_set_cover_mode(struct device *dev,
 	}
 	return ret;
 }
-static DEVICE_ATTR(set_cover_mode, 0664, NULL,
-		fts_set_cover_mode);
+static DEVICE_ATTR(set_cover_mode, 0220, NULL,
+				fts_set_cover_mode);
 
 #endif
 static ssize_t ft5435_fw_name_show(struct device *dev,
