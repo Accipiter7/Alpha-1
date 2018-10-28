@@ -30,7 +30,6 @@
 #include <linux/regulator/consumer.h>
 #include <linux/firmware.h>
 #include <linux/debugfs.h>
-#include <linux/wakelock.h>
 #include "ft5435_ts.h"
 
 #include <linux/proc_fs.h>
@@ -343,7 +342,7 @@ struct ft5435_ts_data {
 #endif
 };
 bool is_ft5435 = false;
-struct wake_lock ft5436_wakelock;
+struct wakeup_source ft5436_wakelock;
 
 static int ft5435_i2c_read(struct i2c_client *client, char *writebuf,
 		int writelen, char *readbuf, int readlen);
@@ -1161,7 +1160,7 @@ static irqreturn_t ft5435_ts_interrupt(int irq, void *dev_id)
 			input_sync(vps_ft5436->proximity_dev);
 			printk("[Fu]close\n");
 		} else if(proximity_status == 0xE0) {
-			wake_lock_timeout(&ft5436_wakelock, 1*HZ);
+			_pm_wakeup_event(&ft5436_wakelock, 1000);
 			input_report_abs(vps_ft5436->proximity_dev, ABS_DISTANCE, 1);
 			input_sync(vps_ft5436->proximity_dev);
 			printk("[Fu]leave\n");
@@ -3979,7 +3978,7 @@ static int ft5435_ts_probe(struct i2c_client *client,
 	w_buf[0] = FT_REG_RESET_FW;
 	ft5435_i2c_write(client, w_buf, 1);
 	init_ok=1;
-	wake_lock_init(&ft5436_wakelock,WAKE_LOCK_SUSPEND, "ft5436");
+	wakeup_source_init(&ft5436_wakelock, "ft5436");
 	if (fts_fw_vendor_id == FTS_VENDOR_1) {
 		strcpy(tp_info_summary,"[Vendor]Biel,[IC]FT5435,[FW]Ver");
 	}else if(fts_fw_vendor_id == FTS_VENDOR_2) {
@@ -4099,7 +4098,7 @@ static int ft5435_ts_remove(struct i2c_client *client)
 	ft5x0x_release_apk_debug_channel();
 #endif
 	input_unregister_device(data->input_dev);
-	wake_lock_destroy(&ft5436_wakelock);
+	wakeup_source_trash(&ft5436_wakelock);
 
 	return 0;
 }
