@@ -1,5 +1,6 @@
 /* Copyright (c) 2014-2016, 2018-2019 The Linux Foundation. All rights reserved.
- *
+ * Copyright (C) 2018 XiaoMi, Inc.
+
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
  * only version 2 as published by the Free Software Foundation.
@@ -4710,12 +4711,18 @@ static int smbchg_restricted_charging(struct smbchg_chip *chip, bool enable)
 	return rc;
 }
 
+extern void tpd_usb_plugin(bool mode);
+int set_usb_charge_mode_par = 0;
 static void handle_usb_removal(struct smbchg_chip *chip)
 {
 	struct power_supply *parallel_psy = get_parallel_psy(chip);
 	union power_supply_propval pval = {0, };
 	int rc;
-
+	
+if (set_usb_charge_mode_par == 2) {
+		tpd_usb_plugin(0);
+	} 
+printk("set_usb_charge_mode_par off = %d\n", set_usb_charge_mode_par);
 	pr_smb(PR_STATUS, "triggered\n");
 	smbchg_aicl_deglitch_wa_check(chip);
 	/* Clear the OV detected status set before */
@@ -4781,7 +4788,10 @@ static void handle_usb_insertion(struct smbchg_chip *chip)
 	enum power_supply_type usb_supply_type;
 	int rc;
 	char *usb_type_name = "null";
-
+    if (set_usb_charge_mode_par == 2) {
+		tpd_usb_plugin(1);
+		}
+printk("set_usb_charge_mode_par on = %d\n", set_usb_charge_mode_par);
 	pr_smb(PR_STATUS, "triggered\n");
 	/* usb inserted */
 	read_usb_type(chip, &usb_type_name, &usb_supply_type);
