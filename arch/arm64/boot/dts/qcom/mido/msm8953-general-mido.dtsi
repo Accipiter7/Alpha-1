@@ -594,3 +594,10 @@
 	qcom,no-aarch64;
 };
 
+&pm8953_vadc {
+	status = "disabled";
+};
+
+&pmi8950_vadc {
+	status = "disabled";
+};
