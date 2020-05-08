@@ -1,0 +1,37 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: 'ubuntu:20.04'
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 'c2:64:78:d6:44:91:db:ef:f6:c0:21:03:61:c7:91:49'
+      - run:
+          name: APT Update
+          command: apt -y update 
+      - run:
+          name: Install Intial Deps (git and openssh)
+          command: apt -y --no-install-recommends install git openssh-client ca-certificates
+      - run:
+          name: Keyscan Github (HACK)
+          command: | 
+            mkdir -p ~/.ssh
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - run:
+          name: Cloning Alpha
+          command:  git clone -b thy --depth 1 -j8 git@github.com:Accipiter7/Alpha-1.git c
+      - run:
+          name: Cloning Toolchain
+          command: git clone --depth 1 -j8 https://github.com/kdrag0n/proton-clang.git pclang
+      - run:
+          name: Installing Required Tools
+          command: apt -y --no-install-recommends install make bc zip curl build-essential python libssl-dev flex bison
+      - run:  
+          name: Compilation
+          command: bash /root/project/c/build.sh
+workflows:
+  version: 2.1
+  cooking:
+    jobs:
+      - build
