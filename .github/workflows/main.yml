@@ -13,8 +13,9 @@ jobs:
     container: accipiter7/waho:latest
     
     steps:
+    - run: echo $GITHUB_WORKSPACE
    
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.1.0
 
     - name: Run build-test script
       run: bash build.sh
