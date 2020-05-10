@@ -62,7 +62,7 @@ function compile()
 	    START=$(date +"%s")
 	    make ARCH=arm64 mido_defconfig O=out 2> /build.log
 	    PATH="/root/project/pclang/bin/:${PATH}" \
-		make O=out -j16 2>> /build.log \
+		make O=out -j8 2>> /build.log \
 			CC=clang \
 			CROSS_COMPILE=aarch64-linux-gnu- \
 			CROSS_COMPILE_ARM32=arm-linux-gnueabi-
