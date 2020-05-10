@@ -26,7 +26,7 @@ function sendLog()
 
 function sendZip()
 {
- cd /ak3 || exit
+ cd /root/project/ak3 || exit
  ZIP=$(echo *.zip)
  curl -F chat_id="${GID}" -F document="@$ZIP"  https://api.telegram.org/bot"${BID}"/sendDocument
 }
