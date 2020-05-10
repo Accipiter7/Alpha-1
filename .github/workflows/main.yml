@@ -1,0 +1,29 @@
+name: Build & Test
+on:
+  push:
+    branches: [ tmp ]
+  pull_request:
+    branches: [ tmp ]
+
+jobs:
+
+  build-test:
+   
+    runs-on: ubuntu-latest
+    container: accipiter7/waho:latest
+    
+    steps:
+   
+    - uses: actions/checkout@v2
+
+    - name: Run build-test script
+      run: bash build.sh
+      
+    - name: shellcheck
+      uses: ludeeus/action-shellcheck@0.1.0
+     
+    - name: clang-format Check
+      uses: jidicula/clang-format-action@v1.0.1
+ 
+ 
+        
