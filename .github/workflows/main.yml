@@ -10,14 +10,11 @@ jobs:
   build-test:
    
     runs-on: ubuntu-latest
-    container: accipiter7/waho:latest
     
     steps:
    
     - uses: actions/checkout@v2.1.0
 
-    - name: Run build-test script
-      run: bash build.sh
       
     - name: shellcheck
       uses: ludeeus/action-shellcheck@0.1.0
