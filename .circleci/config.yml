@@ -7,7 +7,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - 'c2:64:78:d6:44:91:db:ef:f6:c0:21:03:61:c7:91:49'
-       - run:
+      - run:
           name: Keyscan Github (HACK)
           command: | 
             mkdir -p ~/.ssh
