@@ -30,7 +30,6 @@
 #include <linux/regulator/consumer.h>
 #include <linux/firmware.h>
 #include <linux/debugfs.h>
-#include <linux/hqsysfs.h>
 #include <linux/pinctrl/consumer.h>
 #include "ft5435_ts.h"
 
