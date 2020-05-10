@@ -29,7 +29,6 @@
 #include <linux/of_gpio.h>
 #include <linux/delay.h>
 #include <linux/completion.h>
-#include <linux/pinctrl/consumer.h>
 
 #ifdef CONFIG_DRM
 #include <linux/msm_drm_notify.h>
