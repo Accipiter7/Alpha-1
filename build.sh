@@ -21,7 +21,7 @@ function sendInfo()
 
 function sendLog() 
 {
- curl -F chat_id="${GID}" -F document=@/build.log https://api.telegram.org/bot"$BID"/sendDocument
+ curl -F chat_id="${GID}" -F document=@/root/project/build.log https://api.telegram.org/bot"$BID"/sendDocument
 }
 
 function sendZip()
@@ -60,9 +60,9 @@ function compile()
 {
 		cd /__w/Alpha-1/Alpha-1 || exit
 	    START=$(date +"%s")
-	    make ARCH=arm64 mido_defconfig O=out 2> /build.log
+	    make ARCH=arm64 mido_defconfig O=out 2> /root/project/build.log
 	    PATH="/root/project/pclang/bin/:${PATH}" \
-		make O=out -j8 2>> /build.log \
+		make O=out -j4 2>> /root/project/build.log \
 			CC=clang \
 			CROSS_COMPILE=aarch64-linux-gnu- \
 			CROSS_COMPILE_ARM32=arm-linux-gnueabi-
