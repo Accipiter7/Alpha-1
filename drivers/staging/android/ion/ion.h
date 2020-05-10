@@ -35,7 +35,6 @@ struct ion_buffer;
  * do not accept phys_addr_t's that would have to
  */
 #define ion_phys_addr_t dma_addr_t
-#define CONFIG_ION 1
 
 /**
  * struct ion_platform_heap - defines a heap in the given platform
@@ -80,7 +79,7 @@ struct ion_platform_data {
 	struct ion_platform_heap *heaps;
 };
 
-#ifdef CONFIG_ION 
+#ifdef CONFIG_ION
 
 /**
  * ion_reserve() - reserve memory for ion heaps if applicable
