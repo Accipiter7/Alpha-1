@@ -3987,7 +3987,6 @@ static int ft5435_ts_probe(struct i2c_client *client,
 	sprintf(tp_temp_info, "%d",data->fw_ver[0]);
 	strcat(tp_info_summary,tp_temp_info);
 	strcat(tp_info_summary,"\0");
-	hq_regiser_hw_info(HWID_CTP,tp_info_summary);
 	printk("~~~~~ ft5435_ts_probe end\n");
 	return 0;
 
