@@ -58,7 +58,7 @@ function failed()
 
 function compile() 
 {
-		cd /root/project/c || exit
+		cd /__w/Alpha-1/Alpha-1 || exit
 	    START=$(date +"%s")
 	    make ARCH=arm64 mido_defconfig O=out 2> /build.log
 	    PATH="/root/project/pclang/bin/:${PATH}" \
