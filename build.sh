@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+cd /root/project/c && git pull
 git clone --depth 1  https://github.com/accipiter7/AnyKernel3 -b mido /root/project/ak3
 
 # Set Build Env
