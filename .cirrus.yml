@@ -1,1 +1,6 @@
+container:
+  image: accipiter7/waho:latest
 
+task:
+  
+  test_script: bash build.sh
