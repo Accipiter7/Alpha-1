@@ -85,6 +85,10 @@
 	};
 };
 
+&pm8953_vadc {
+	/delete-node/ chan@11;
+};
+
 &i2c_5 { /* BLSP2 QUP1 (NFC) */
 	#address-cells = <1>;
 	#size-cells = <0>;
