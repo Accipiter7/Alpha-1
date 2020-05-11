@@ -11,7 +11,4 @@ jobs:
         uses: deep5050/flawfinder-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN}}
-      - name: Terraform security scan
-        uses: triat/terraform-security-scan@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     
