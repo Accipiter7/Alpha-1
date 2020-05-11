@@ -3734,7 +3734,6 @@ static int ft5435_ts_probe(struct i2c_client *client,
 	while (retry--) {
 		err = ft5435_i2c_read(client, &reg_addr, 1, &reg_value, 1);
 		if (!(err<0)) {
-			set_usb_charge_mode_par=2;
 			dev_info(&client->dev, "Device ID = 0x%x\n", reg_value);
 			break;
 		}
