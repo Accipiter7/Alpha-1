@@ -139,6 +139,9 @@ void mdss_dump_dsi_debug_bus(u32 bus_dump_flag,
 	pr_info("========End DSI Debug Bus=========\n");
 }
 
+#ifdef CONFIG_MACH_XIAOMI_C6
+int panel_suspend_reset_flag = 0;
+#endif
 static void mdss_dsi_pm_qos_add_request(struct mdss_dsi_ctrl_pdata *ctrl_pdata)
 {
 	struct irq_info *irq_info;
@@ -2999,6 +3002,13 @@ static struct device_node *mdss_dsi_find_panel_of_node(
 		}
 		pr_info("%s: cmdline:%s panel_name:%s\n",
 			__func__, panel_cfg, panel_name);
+#ifdef CONFIG_MACH_XIAOMI_C6
+		if (!strcmp(panel_name, "qcom,mdss_dsi_otm1911_fhd_video"))
+			panel_suspend_reset_flag = 2;
+		else if (!strcmp(panel_name, "qcom,mdss_dsi_ili9885_boe_fhd_video"))
+			panel_suspend_reset_flag = 3;
+		else
+#endif
 		if (!strcmp(panel_name, NONE_PANEL))
 			goto exit;
 			
@@ -4412,6 +4422,12 @@ int dsi_panel_device_register(struct platform_device *ctrl_pdev,
 	}
 	else if (ctrl_pdata->status_mode == ESD_BTA)
 		ctrl_pdata->check_status = mdss_dsi_bta_status_check;
+#ifdef CONFIG_MACH_XIAOMI_C6
+	else if (ctrl_pdata->status_mode == ESD_TE_NT35596) {
+		ctrl_pdata->check_status = mdss_dsi_TE_NT35596_check;
+		init_te_irq(ctrl_pdata);
+	}
+#endif
 
 	if (ctrl_pdata->status_mode == ESD_MAX) {
 		pr_err("%s: Using default BTA for ESD check\n", __func__);
