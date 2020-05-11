@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 cd /root/project/c && git pull
 git clone --depth 1  https://github.com/accipiter7/AnyKernel3 -b mido /root/project/ak3
-
 # Set Build Env
 IMG=/root/project/c/out/arch/arm64/boot/Image.gz-dtb
 TC_VER=$("/root/project/pclang/bin/clang" --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
