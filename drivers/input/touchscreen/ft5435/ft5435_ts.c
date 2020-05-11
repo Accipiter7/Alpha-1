@@ -245,7 +245,6 @@ enum proximity_sensor_vendor
 	TOTAL,
 };
 
-extern int set_usb_charge_mode_par;
 extern int TX_NUM;
 extern int RX_NUM;
 extern int SCab_1;
