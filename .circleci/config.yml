@@ -1,0 +1,14 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: 'accipiter7/thy:latest'
+    steps:
+      - run:  
+          name: Compilation
+          command: bash /root/project/c/build.sh
+workflows:
+  version: 2.1
+  cooking:
+    jobs:
+      - build
