@@ -502,6 +502,7 @@
 
 &usb3 {
 	qcom,detect-dpdm-floating;
+	qcom,usbin-vadc = <&pmi8950_vadc>;
 };
 
 &qusb_phy {
@@ -594,3 +595,20 @@
 	qcom,no-aarch64;
 };
 
+&pm8953_vadc {
+	pinctrl-0 = <&pa_therm1_default>;
+	/delete-node/ chan@8;
+	/delete-node/ chan@13;
+	/delete-node/ chan@3c;
+};
+
+&pm8953_mpps {
+	/delete-node/ case_therm;
+};
+
+&thermal_zones {
+	/delete-node/ xo-therm-buf-adc;
+	/delete-node/ case-therm-adc;
+	/delete-node/ case-therm-step;
+	/delete-node/ bms;
+};
