@@ -20,11 +20,7 @@
 #include <media/rc-core.h>
 #include "rc-core-priv.h"
 
-#ifdef CONFIG_MACH_XIAOMI_C6
 #define LIRCBUF_SIZE 1024
-#else
-#define LIRCBUF_SIZE 256
-#endif
 
 /**
  * ir_lirc_decode() - Send raw IR data to lirc_dev to be relayed to the
@@ -329,8 +325,6 @@ static long ir_lirc_ioctl(struct file *filep, unsigned int cmd,
 
 static int ir_lirc_open(void *data)
 {
-
-#ifdef CONFIG_MACH_XIAOMI_C6
 	struct lirc_codec *lirc = data;
 	struct rc_dev *dev = lirc->dev;
 	int ret = 0;
@@ -343,15 +337,10 @@ static int ir_lirc_open(void *data)
 	mutex_unlock(&dev->lock);
 
 	return ret;
-#else
-	return 0;
-#endif
 }
 
 static void ir_lirc_close(void *data)
 {
-
-#ifdef CONFIG_MACH_XIAOMI_C6
 	struct lirc_codec *lirc = data;
 	struct rc_dev *dev = lirc->dev;
 
@@ -359,9 +348,6 @@ static void ir_lirc_close(void *data)
 	if (!--dev->open_count && dev->close)
 		dev->close(dev);
 	mutex_unlock(&dev->lock);
-#else
-	return;
-#endif
 }
 
 static const struct file_operations lirc_fops = {
@@ -429,11 +415,7 @@ static int ir_lirc_register(struct rc_dev *dev)
 	drv->rbuf = rbuf;
 	drv->set_use_inc = &ir_lirc_open;
 	drv->set_use_dec = &ir_lirc_close;
-#ifdef CONFIG_MACH_XIAOMI_C6
 	drv->code_length = sizeof(int) * 8;
-#else
-	drv->code_length = sizeof(struct ir_raw_event) * 8;
-#endif
 	drv->fops = &lirc_fops;
 	drv->dev = &dev->dev;
 	drv->rdev = dev;
@@ -450,9 +432,7 @@ static int ir_lirc_register(struct rc_dev *dev)
 	return 0;
 
 lirc_register_failed:
-#ifdef CONFIG_MACH_XIAOMI_C6
 	lirc_buffer_free(rbuf);
-#endif
 rbuf_init_failed:
 	kfree(rbuf);
 rbuf_alloc_failed:

@@ -159,13 +159,19 @@ config ARCH_SDM670
 
 config ARCH_MSM8953
 	bool "Enable Support for Qualcomm Technologies Inc. MSM8953"
-	depends on ARCH_QCOM
+	select on ARCH_QCOM
 	select CPU_FREQ_QCOM
 	select COMMON_CLK_MSM
 	select ARCH_MSM8953_SOC_SETTINGS
 	help
 	  This enables support for the MSM8953 chipset. If you do not
 	  wish to build a kernel that runs on this chipset, say 'N' here.
+	  
+config MACH_XIAOMI_MIDO
+    bool "Enable Support for Xiaomi Redmi Note 4 (MIDO)"
+    select ARCH_MSM8953
+    help 
+      This enables support for the MIDO sd625(global variant)
 
 config ARCH_MSM8937
 	bool "Enable Support for Qualcomm Technologies Inc. MSM8937"
@@ -352,36 +358,5 @@ config ARCH_ZYNQMP
 	bool "Xilinx ZynqMP Family"
 	help
 	  This enables support for Xilinx ZynqMP Family
-
-config MACH_XIAOMI
-	bool "Xiaomi devices"
-	help
-	  This enables support for Xiaomi devices.
-
-if MACH_XIAOMI
-
-config MACH_XIAOMI_MSM8953
-	bool
-	select ARCH_QCOM
-	select ARCH_MSM8953
-
-choice
-	prompt "Xiaomi device"
-	default MACH_XIAOMI_DUMMY
-
-config MACH_XIAOMI_DUMMY
-	bool "Dummy device"
-	help
-	  A stub configuration that doesn't enable support for anything.
-
-config MACH_XIAOMI_C6
-	bool "C6 board"
-	select MACH_XIAOMI_MSM8953
-	help
-	  This enables support for Xiaomi Redmi Note 4(X).
-
-endchoice
-
-endif
 
 endmenu

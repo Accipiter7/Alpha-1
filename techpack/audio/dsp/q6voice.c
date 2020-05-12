@@ -96,10 +96,9 @@ static int voice_send_cvp_topology_commit_cmd(struct voice_data *v);
 static int voice_send_cvp_channel_info_cmd(struct voice_data *v);
 static int voice_send_cvp_channel_info_v2(struct voice_data *v,
 					  uint32_t param_type);
-#ifndef CONFIG_MACH_XIAOMI_C6
+#ifndef CONFIG_MACH_XIAOMI_MIDO
 static int voice_get_avcs_version_per_service(uint32_t service_id);
 #endif
-
 static int voice_cvs_stop_playback(struct voice_data *v);
 static int voice_cvs_start_playback(struct voice_data *v);
 static int voice_cvs_start_record(struct voice_data *v, uint32_t rec_mode);
@@ -4344,8 +4343,7 @@ static int voice_send_cvp_mfc_config_cmd(struct voice_data *v)
 
 	return ret;
 }
-
-#ifndef CONFIG_MACH_XIAOMI_C6
+#ifndef CONFIG_MACH_XIAOMI_MIDO
 static int voice_get_avcs_version_per_service(uint32_t service_id)
 {
 	int ret = 0;
@@ -4375,7 +4373,6 @@ done:
 	return ret;
 }
 #endif
-
 static void voice_mic_break_work_fn(struct work_struct *work)
 {
 	int ret = 0;
@@ -4402,8 +4399,7 @@ static int voice_setup_vocproc(struct voice_data *v)
 		pr_err("%s: CVP create failed err:%d\n", __func__, ret);
 		goto fail;
 	}
-
-#ifndef CONFIG_MACH_XIAOMI_C6
+#ifndef CONFIG_MACH_XIAOMI_MIDO
 	if (common.is_avcs_version_queried == false)
 		common.cvp_version = voice_get_avcs_version_per_service(
 				     APRV2_IDS_SERVICE_ID_ADSP_CVP_V);

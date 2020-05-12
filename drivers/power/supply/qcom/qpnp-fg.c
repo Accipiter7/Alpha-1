@@ -244,10 +244,10 @@ enum fg_mem_data_index {
 
 static struct fg_mem_setting settings[FG_MEM_SETTING_MAX] = {
 	/*       ID                    Address, Offset, Value*/
-	SETTING(SOFT_COLD,       0x454,   0,      100),
-	SETTING(SOFT_HOT,        0x454,   1,      400),
-	SETTING(HARD_COLD,       0x454,   2,      50),
-	SETTING(HARD_HOT,        0x454,   3,      450),
+	SETTING(SOFT_COLD,       0x454,   0,      150),
+	SETTING(SOFT_HOT,        0x454,   1,      450),
+	SETTING(HARD_COLD,       0x454,   2,      0),
+	SETTING(HARD_HOT,        0x454,   3,      550),
 	SETTING(RESUME_SOC,      0x45C,   1,      0),
 	SETTING(BCL_LM_THRESHOLD, 0x47C,   2,      50),
 	SETTING(BCL_MH_THRESHOLD, 0x47C,   3,      752),
@@ -255,11 +255,7 @@ static struct fg_mem_setting settings[FG_MEM_SETTING_MAX] = {
 	SETTING(CHG_TERM_CURRENT, 0x4F8,   2,      250),
 	SETTING(IRQ_VOLT_EMPTY,	 0x458,   3,      3100),
 	SETTING(CUTOFF_VOLTAGE,	 0x40C,   0,      3400),
-#ifdef CONFIG_MACH_XIAOMI_C6
 	SETTING(VBAT_EST_DIFF,	 0x000,   0,      200),
-#else
-	SETTING(VBAT_EST_DIFF,	 0x000,   0,      30),
-#endif
 	SETTING(DELTA_SOC,	 0x450,   3,      1),
 	SETTING(BATT_LOW,	 0x458,   0,      4200),
 	SETTING(THERM_DELAY,	 0x4AC,   3,      0),
@@ -341,7 +337,7 @@ module_param_named(
 	battery_type, fg_batt_type, charp, 00600
 );
 
-static int fg_sram_update_period_ms = 30000;
+static int fg_sram_update_period_ms = 3000;
 module_param_named(
 	sram_update_period_ms, fg_sram_update_period_ms, int, 00600
 );
@@ -2038,12 +2034,6 @@ static void fg_handle_battery_insertion(struct fg_chip *chip)
 				&chip->update_sram_data, msecs_to_jiffies(0));
 }
 
-#ifndef CONFIG_MACH_XIAOMI_C6
-static int soc_to_setpoint(int soc)
-{
-	return DIV_ROUND_CLOSEST(soc * 255, 100);
-}
-#endif
 
 static void batt_to_setpoint_adc(int vbatt_mv, u8 *data)
 {
@@ -4069,7 +4059,7 @@ static void status_change_work(struct work_struct *work)
 
 	if (chip->status == POWER_SUPPLY_STATUS_FULL) {
 		if (capacity >= 99 && chip->hold_soc_while_full
-				&& chip->health == POWER_SUPPLY_HEALTH_GOOD) {
+				&& (chip->health == POWER_SUPPLY_HEALTH_GOOD || chip->health == POWER_SUPPLY_HEALTH_COOL)) {
 			if (fg_debug_mask & FG_STATUS)
 				pr_info("holding soc at 100\n");
 			chip->charge_full = true;
@@ -4704,7 +4694,7 @@ static int fg_power_get_property(struct power_supply *psy,
 			val->intval = 1;
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-		val->intval = chip->nom_cap_uah;
+		val->intval = 4100000;
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_FULL:
 		val->intval = chip->learning_data.learned_cc_uah;
@@ -8110,13 +8100,7 @@ static int fg_common_hw_init(struct fg_chip *chip)
 		}
 	}
 
-	rc = fg_mem_masked_write(chip, settings[FG_MEM_DELTA_SOC].address, 0xFF,
-#ifdef CONFIG_MACH_XIAOMI_C6
-			1,
-#else
-			soc_to_setpoint(settings[FG_MEM_DELTA_SOC].value),
-#endif
-			settings[FG_MEM_DELTA_SOC].offset);
+	rc = fg_mem_masked_write(chip, settings[FG_MEM_DELTA_SOC].address, 0xFF,1,settings[FG_MEM_DELTA_SOC].offset);
 	if (rc) {
 		pr_err("failed to write delta soc rc=%d\n", rc);
 		return rc;

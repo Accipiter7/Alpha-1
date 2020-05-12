@@ -105,14 +105,12 @@ EXPORT_SYMBOL_GPL(ir_raw_event_store);
  * (or similar events) on state change.
  */
 int ir_raw_event_store_edge(struct rc_dev *dev, enum raw_event_type type)
-#ifdef CONFIG_MACH_XIAOMI_C6
 {
 	return ir_raw_event_store_edge_with_adjust(dev, type, 0);
 }
 EXPORT_SYMBOL_GPL(ir_raw_event_store_edge);
 
 int ir_raw_event_store_edge_with_adjust(struct rc_dev *dev, enum raw_event_type type, s32 ns)
-#endif
 {
 	ktime_t			now;
 	s64			delta; /* ns */
@@ -122,12 +120,8 @@ int ir_raw_event_store_edge_with_adjust(struct rc_dev *dev, enum raw_event_type 
 
 	if (!dev->raw)
 		return -EINVAL;
-
-#ifdef CONFIG_MACH_XIAOMI_C6
+		
 	now = ktime_add_ns(ktime_get(), ns);
-#else
-	now = ktime_get();
-#endif
 	delta = ktime_to_ns(ktime_sub(now, dev->raw->last_event));
 	delay = MS_TO_NS(dev->input_dev->rep[REP_DELAY]);
 
@@ -155,11 +149,8 @@ int ir_raw_event_store_edge_with_adjust(struct rc_dev *dev, enum raw_event_type 
 	dev->raw->last_type = type;
 	return rc;
 }
-#ifdef CONFIG_MACH_XIAOMI_C6
+
 EXPORT_SYMBOL_GPL(ir_raw_event_store_edge_with_adjust);
-#else
-EXPORT_SYMBOL_GPL(ir_raw_event_store_edge);
-#endif
 
 /**
  * ir_raw_event_store_with_filter() - pass next pulse/space to decoders with some processing

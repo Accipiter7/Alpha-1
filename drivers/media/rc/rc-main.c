@@ -747,7 +747,6 @@ static int ir_open(struct input_dev *idev)
 {
 	struct rc_dev *rdev = input_get_drvdata(idev);
 
-#ifdef CONFIG_MACH_XIAOMI_C6
 	int rc = 0;
 
 	mutex_lock(&rdev->lock);
@@ -758,9 +757,6 @@ static int ir_open(struct input_dev *idev)
 	mutex_unlock(&rdev->lock);
 
 	return rc;
-#else
-	return rc_open(rdev);
-#endif
 }
 
 void rc_close(struct rc_dev *rdev)
@@ -780,16 +776,12 @@ static void ir_close(struct input_dev *idev)
 {
 	struct rc_dev *rdev = input_get_drvdata(idev);
 
-#ifdef CONFIG_MACH_XIAOMI_C6
 	 if (rdev) {
 		mutex_lock(&rdev->lock);
 		if (!--rdev->open_count)
 			rdev->close(rdev);
 		mutex_unlock(&rdev->lock);
 	}
-#else
-	rc_close(rdev);
-#endif
 }
 
 /* class for /sys/class/rc */

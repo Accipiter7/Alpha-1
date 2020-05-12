@@ -2375,15 +2375,10 @@ static void msm_isp_update_camif_output_count(
 #define ISP_DEFAULT_FORMAT_FACTOR 6
 #define ISP_BUS_UTILIZATION_FACTOR 6
 
-#ifdef CONFIG_MACH_XIAOMI_C6
 static int msm_isp_update_stream_bandwidth(struct vfe_device *vfe_dev)
-#else
-int msm_isp_update_stream_bandwidth(struct vfe_device *vfe_dev,
-	enum msm_vfe_hw_state hw_state)
-#endif
 {
 	int i, rc = 0;
-#ifndef CONFIG_MACH_XIAOMI_C6
+#ifndef CONFIG_MACH_XIAOMI_MIDO
 	int frame_src, ms_type;
 #endif
 	struct msm_vfe_axi_stream *stream_info;
@@ -2396,7 +2391,7 @@ int msm_isp_update_stream_bandwidth(struct vfe_device *vfe_dev,
 
 	for (i = 0; i < VFE_AXI_SRC_MAX; i++) {
 		stream_info = &axi_data->stream_info[i];
-#ifndef CONFIG_MACH_XIAOMI_C6
+#ifndef CONFIG_MACH_XIAOMI_MIDO
 		frame_src = SRC_TO_INTF(stream_info->stream_src);
 		ms_type = vfe_dev->axi_data.src_info[frame_src].
 			dual_hw_ms_info.dual_hw_ms_type;
@@ -3041,11 +3036,7 @@ static int msm_isp_start_axi_stream(struct vfe_device *vfe_dev,
 		}
 	}
 	mutex_unlock(&vfe_dev->buf_mgr->lock);
-#ifdef CONFIG_MACH_XIAOMI_C6
 	msm_isp_update_stream_bandwidth(vfe_dev);
-#else
-	msm_isp_update_stream_bandwidth(vfe_dev, stream_cfg_cmd->hw_state);
-#endif
 	vfe_dev->hw_info->vfe_ops.axi_ops.reload_wm(vfe_dev,
 		vfe_dev->vfe_base, wm_reload_mask);
 	msm_isp_update_camif_output_count(vfe_dev, stream_cfg_cmd);
@@ -3250,12 +3241,7 @@ static int msm_isp_stop_axi_stream(struct vfe_device *vfe_dev,
 	}
 
 	msm_isp_update_camif_output_count(vfe_dev, stream_cfg_cmd);
-#ifdef CONFIG_MACH_XIAOMI_C6
         msm_isp_update_stream_bandwidth(vfe_dev);
-#else
-        msm_isp_update_stream_bandwidth(vfe_dev, stream_cfg_cmd->hw_state);
-#endif
-
 	for (i = 0; i < stream_cfg_cmd->num_streams; i++) {
 		stream_info = &axi_data->stream_info[
 			HANDLE_TO_IDX(stream_cfg_cmd->stream_handle[i])];
