@@ -96,6 +96,10 @@
 	};
 
 	qcom,pmi8950@2 {
+		pmi8950_vadc: vadc@3100 {
+			status = "disabled";
+		};
+
 		pmi8950_gpios: gpios {
 			gpio@c000 {
 				status = "okay";
@@ -430,7 +434,7 @@
 			<55 512 0 0>,
 			<55 512 0 0>,
 			<55 512 120000 1200000>,
-			<55 512 393600 3936000>,
+			<55 512 393600 3936000>;
 		clocks = <&clock_gcc clk_crypto_clk_src>,
 			<&clock_gcc clk_gcc_crypto_clk>,
 			<&clock_gcc clk_gcc_crypto_ahb_clk>,
@@ -495,5 +499,11 @@
 		pinctrl-1 = <&fpc_reset_reset>;
 		pinctrl-2 = <&fpc_reset_active>;
 		pinctrl-3 = <&fpc_irq_active>;
+	};
+};
+
+&thermal_zones {
+	chg-temp-adc {
+		status = "disabled";
 	};
 };
