@@ -4716,7 +4716,7 @@ static int smbchg_restricted_charging(struct smbchg_chip *chip, bool enable)
 }
 
 
-#if defined (CONFIG_TOUCHSCREEN_FT5435) && (CONFIG_TOUCHSCREEN_IST3038C) && (CONFIG_TOUCHSCREEN_GT9XX_v24)
+#if defined(CONFIG_TOUCHSCREEN_FT5435) && defined(CONFIG_TOUCHSCREEN_IST3038C) && defined(CONFIG_TOUCHSCREEN_GT9XX_v24)
 extern void tpd_usb_plugin(bool mode);
 extern void gtp_usb_plugin(bool mode);
 extern void ist30xx_set_ta_mode(bool mode);
@@ -4842,7 +4842,7 @@ static void handle_usb_insertion(struct smbchg_chip *chip)
 	int rc;
 	char *usb_type_name = "null";
 
-#if defined (CONFIG_TOUCHSCREEN_FT5435) && (CONFIG_TOUCHSCREEN_IST3038C) && (CONFIG_TOUCHSCREEN_GT9XX_v24)
+#if defined(CONFIG_TOUCHSCREEN_FT5435) && defined(CONFIG_TOUCHSCREEN_IST3038C) && defined(CONFIG_TOUCHSCREEN_GT9XX_v24)
 	if (set_usb_charge_mode_par == 1)
 		ist30xx_set_ta_mode(1);
 	else if (set_usb_charge_mode_par == 2)
