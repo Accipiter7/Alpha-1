@@ -4714,27 +4714,61 @@ static int smbchg_restricted_charging(struct smbchg_chip *chip, bool enable)
 
 	return rc;
 }
+// value to be initialized by touchscreen driver in use.
+int set_usb_charge_mode_par = 0;
 
-#ifdef CONFIG_MACH_XIAOMI_MIDO
-extern void ist30xx_set_ta_mode(bool mode);
+#if defined(CONFIG_TOUCHSCREEN_FT5435) && defined(CONFIG_TOUCHSCREEN_IST3038C) && defined(CONFIG_TOUCHSCREEN_GT9XX_v24)
 extern void tpd_usb_plugin(bool mode);
 extern void gtp_usb_plugin(bool mode);
-int set_usb_charge_mode_par = 0;
+extern void ist30xx_set_ta_mode(bool mode);
+
+#else
+
+#ifdef CONFIG_TOUCHSCREEN_FT5435 
+extern void tpd_usb_plugin(bool mode);
 #endif
+
+#ifdef CONFIG_TOUCHSCREEN_GT9XX_v24
+extern void gtp_usb_plugin(bool mode);
+#endif
+
+#ifdef CONFIG_TOUCHSCREEN_IST3038C
+extern void ist30xx_set_ta_mode(bool mode);
+
+#endif
+
+#endif
+
 static void handle_usb_removal(struct smbchg_chip *chip)
 {
 	struct power_supply *parallel_psy = get_parallel_psy(chip);
 	union power_supply_propval pval = {0, };
 	int rc;
 
-#ifdef CONFIG_MACH_XIAOMI_MIDO
+#if defined(CONFIG_TOUCHSCREEN_FT5435) && defined(CONFIG_TOUCHSCREEN_IST3038C) && defined(CONFIG_TOUCHSCREEN_GT9XX_v24)
 	if (set_usb_charge_mode_par == 1)
 		ist30xx_set_ta_mode(0);
 	else if (set_usb_charge_mode_par == 2)
 		tpd_usb_plugin(0);
 	else if (set_usb_charge_mode_par == 3)
 		gtp_usb_plugin(0);
+		
+#else
+
+#ifdef CONFIG_TOUCHSCREEN_FT5435
+	tpd_usb_plugin(0);
 #endif
+
+#ifdef CONFIG_TOUCHSCREEN_GT9XX_v24
+	gtp_usb_plugin(0);
+#endif
+
+#ifdef CONFIG_TOUCHSCREEN_IST3038C
+	ist30xx_set_ta_mode(0);
+#endif
+
+#endif
+
 
 	pr_smb(PR_STATUS, "triggered\n");
 	smbchg_aicl_deglitch_wa_check(chip);
@@ -4805,13 +4839,27 @@ static void handle_usb_insertion(struct smbchg_chip *chip)
 	int rc;
 	char *usb_type_name = "null";
 
-#ifdef CONFIG_MACH_XIAOMI_MIDO
+#if defined(CONFIG_TOUCHSCREEN_FT5435) && defined(CONFIG_TOUCHSCREEN_IST3038C) && defined(CONFIG_TOUCHSCREEN_GT9XX_v24)
 	if (set_usb_charge_mode_par == 1)
 		ist30xx_set_ta_mode(1);
 	else if (set_usb_charge_mode_par == 2)
 		tpd_usb_plugin(1);
 	else if (set_usb_charge_mode_par == 3)
 		gtp_usb_plugin(1);
+#else
+
+#ifdef CONFIG_TOUCHSCREEN_FT5435
+	tpd_usb_plugin(1);
+#endif
+
+#ifdef CONFIG_TOUCHSCREEN_GT9XX_v24
+	gtp_usb_plugin(1);
+#endif
+
+#ifdef CONFIG_TOUCHSCREEN_IST3038C
+	ist30xx_set_ta_mode(1);
+#endif
+
 #endif
 
 	pr_smb(PR_STATUS, "triggered\n");
