@@ -4748,7 +4748,7 @@ static void handle_usb_removal(struct smbchg_chip *chip)
 	union power_supply_propval pval = {0, };
 	int rc;
 
-#if defined (CONFIG_TOUCHSCREEN_FT5435) && (CONFIG_TOUCHSCREEN_IST3038C) && (CONFIG_TOUCHSCREEN_GT9XX_v24)
+#if defined(CONFIG_TOUCHSCREEN_FT5435) && defined(CONFIG_TOUCHSCREEN_IST3038C) && defined(CONFIG_TOUCHSCREEN_GT9XX_v24)
 	if (set_usb_charge_mode_par == 1)
 		ist30xx_set_ta_mode(0);
 	else if (set_usb_charge_mode_par == 2)
