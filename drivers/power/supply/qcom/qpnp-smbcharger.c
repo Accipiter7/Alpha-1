@@ -4726,17 +4726,14 @@ int set_usb_charge_mode_par = 0;
 
 #ifdef CONFIG_TOUCHSCREEN_FT5435 
 extern void tpd_usb_plugin(bool mode);
-int set_usb_charge_mode_par = 2;
 #endif
 
 #ifdef CONFIG_TOUCHSCREEN_GT9XX_v24
 extern void gtp_usb_plugin(bool mode);
-int set_usb_charge_mode_par = 3;
 #endif
 
 #ifdef CONFIG_TOUCHSCREEN_IST3038C
 extern void ist30xx_set_ta_mode(bool mode);
-int set_usb_charge_mode_par = 1;
 
 #endif
 
