@@ -4714,13 +4714,13 @@ static int smbchg_restricted_charging(struct smbchg_chip *chip, bool enable)
 
 	return rc;
 }
-
+// value to be set by touchscreen driver & depends on which touchscreen driver in use
+int set_usb_charge_mode_par = 0;
 
 #if defined(CONFIG_TOUCHSCREEN_FT5435) && defined(CONFIG_TOUCHSCREEN_IST3038C) && defined(CONFIG_TOUCHSCREEN_GT9XX_v24)
 extern void tpd_usb_plugin(bool mode);
 extern void gtp_usb_plugin(bool mode);
 extern void ist30xx_set_ta_mode(bool mode);
-int set_usb_charge_mode_par = 0;
 
 #else
 
